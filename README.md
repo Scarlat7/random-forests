@@ -5,9 +5,9 @@ Random forests algorithm implementation for UFRGS' class INF1017 - Machine Learn
 - [ ] Decision Tree Algorithm - with Information Gain (Natália)
   - [ ] Category attributes (Natália)
   - [ ] Numerical attributes (Natália)
-- [ ] Function to classify new instance with decision tree
+- [ ] Function to classify new instance with decision tree (Natália)
 - [ ] Bootstrap for data sampling
-- [ ] Sampling of m attributes for each node division
+- [ ] Sampling of m attributes for each node division (Natália)
 - [ ] Training of an ensemble of trees
 - [ ] Majority voting for the ensemble
 - [ ] Stratified cross-validation
@@ -49,6 +49,3 @@ python3 -m pip install -r requirements.txt
 # Running the Random Forests algorithm
 
 TBD
-
-
-
