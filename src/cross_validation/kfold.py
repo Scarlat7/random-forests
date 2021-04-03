@@ -28,13 +28,13 @@ def split_data(df, k: int, target_name: str, target_values: list):
         n = fold_size * tr
         n_target_per_fold.append(n)
 
-    if any(x < 1 for x in n_target_per_fold) :
+    if any(x < 1 for x in n_target_per_fold):
         raise "Number of folds to high, will not be able to stratify"
 
     # since we divide into the folds getting from the start of the table, it is good to shuffle the rows first
     df = df.sample(frac=1, random_state=SEED).reset_index(drop=True)
 
-    # divide targets 
+    # divide targets
     targets_df = []
     for t in target_values:
         d = df.loc[df[target_name] == t]
@@ -46,9 +46,10 @@ def split_data(df, k: int, target_name: str, target_values: list):
         if i != k-1:
             fold_dfs = []
             for i in range(len(targets_df)):
-                # extract the first n rows 
-                d =  targets_df[i].iloc[:int(n_target_per_fold[i]), :]
-                targets_df[i] = targets_df[i].iloc[int(n_target_per_fold[i]):, :]
+                # extract the first n rows
+                d = targets_df[i].iloc[:int(n_target_per_fold[i]), :]
+                targets_df[i] = targets_df[i].iloc[int(
+                    n_target_per_fold[i]):, :]
                 fold_dfs.append(d)
             f = pd.concat(fold_dfs)
         else:
@@ -61,6 +62,8 @@ def split_data(df, k: int, target_name: str, target_values: list):
     return folds
 
 # This will be changed for the function of testing the score of the forest
+
+
 def mock_get_forest_score(train_folds, test_fold):
     return random.random()
 
@@ -76,6 +79,7 @@ def kfold(df, k: int, target_name: str, target_values: list):
 
     return median(scores), stdev(scores)
 
+
 def validate_stratify_folds(df, k: int, target_name: str, target_values: list):
     '''
     validate_stratify_folds can be use to validate the stratifying of the data.
@@ -86,7 +90,8 @@ def validate_stratify_folds(df, k: int, target_name: str, target_values: list):
     original_stats = ''
     for v in target_values:
         d = df.loc[df[target_name] == v]
-        original_stats += ' ratio ' + str(v) + ': ' + str(d[target_name].size / df[target_name].size)
+        original_stats += ' ratio ' + \
+            str(v) + ': ' + str(d[target_name].size / df[target_name].size)
 
     print('[ORIG] Size: ' + str(df[target_name].size) + original_stats)
     folds = split_data(df, k, target_name, target_values)
@@ -95,12 +100,13 @@ def validate_stratify_folds(df, k: int, target_name: str, target_values: list):
         fold_stats = ''
         for v in target_values:
             d = f.loc[f[target_name] == v]
-            fold_stats += ' ratio ' + str(v) + ': ' + str(d[target_name].size / f[target_name].size)
+            fold_stats += ' ratio ' + \
+                str(v) + ': ' + str(d[target_name].size / f[target_name].size)
         total_folds_size += f[target_name].size
         print('[FOLD] Size: ' + str(f[target_name].size) + fold_stats)
-    
-    print('Original size: ' + str(df[target_name].size) + ' Sum of folds size: ' + str(total_folds_size))
 
+    print('Original size: ' + str(df[target_name].size) +
+          ' Sum of folds size: ' + str(total_folds_size))
 
 
 if __name__ == "__main__":
@@ -122,4 +128,3 @@ if __name__ == "__main__":
     print('Stddev: ' + str(d))
 
     # validate_stratify_folds(df, 10, target_name, target_values)
-    
