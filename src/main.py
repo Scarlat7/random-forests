@@ -2,11 +2,12 @@ import sys
 import pandas as pd
 
 # Local imports
-from utils.data import get_partition_of_dataset
+from utils.data import *
 from decision_tree.Tree import Node
 from decision_tree.DecisionTree import DecisionTree
 
 NB_ARGUMENTS = 3
+NB_BINS = 5
 
 if __name__ == "__main__":
     if len(sys.argv) == NB_ARGUMENTS:
