@@ -14,6 +14,7 @@ if __name__ == "__main__":
         delimiter = sys.argv[2]
         df = pd.read_csv(data_file, sep = delimiter)
         decision_tree = DecisionTree(df)
-        decision_tree.train(df.columns[:-1].to_series())
+        decision_tree.train_tree(df.columns[:-1].to_series())
+        print("Predicted class: " + decision_tree.classify_sample(df.iloc[0]))
     else:
         print("Wrong number of arguments ({}). Please use script as python3 main.py <data_file_name> '<file_delimiter>'. E.g.: python3 main.py data.csv ','".format(len(sys.argv)))

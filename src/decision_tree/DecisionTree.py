@@ -6,22 +6,34 @@ from utils.data import all_equal
 
 FIRST_ELEMENT = 0
 
-class DecisionTree():
+class DecisionTree:
 
     """
     @input: data - data frame containing data
+    @input: all_attr_values - all possible values for all attributes
     """
-    def __init__(self, data):
+    def __init__(self, data, all_attr_values = None):
         self.data = data
+        if all_attr_values is None:
+            all_attr_values = {}
+        self.all_attr_values = all_attr_values
+        self.tree = None
+    
+    """
+    Trains a decision tree, saving the root in the DecisionTree object
+    @input: attributes - attributes from the data frame to consider while node splitting
+    """
+    def train_tree(self, attributes):
+        self.save_all_attr_values()
+        self.tree = self.train(attributes)
 
     """
     Trains a decision tree based on given data and outcomes
-    @input: attributes - attributes from the data frame to consider while node splitting
+    @input: attributes - attributes from the data frame to consider while node splitting (Series)
     @output: root node of the decision tree trained
     """
     def train(self, attributes):
         outcomes = self.data[self.data.columns[-1]]
-
         node = Node()
         if all_equal(outcomes):
             node.category = outcomes.iloc[FIRST_ELEMENT]
@@ -31,7 +43,7 @@ class DecisionTree():
             chosen_attribute, info_gain = self.get_best_attribute()
             node.attribute = chosen_attribute
             node.gain = info_gain
-            attributes.drop(columns = chosen_attribute)
+            attributes.drop(labels = chosen_attribute, inplace = True)
             node = self.node_split(node, chosen_attribute, attributes)
         return node
     
@@ -45,13 +57,14 @@ class DecisionTree():
     @output - none (side-effect: the node's children will be updated)
     """
     def node_split(self, node, chosen_attribute, attributes):
-        for attr_value in self.data[chosen_attribute].unique():
+        outcomes = outcomes = self.data[self.data.columns[-1]]
+        for attr_value in self.all_attr_values[chosen_attribute]:
             attribute_data = self.get_all_samples_with_given_attribute_value(chosen_attribute, attr_value)
             if  attribute_data.empty:
                 node.category = outcomes.mode().iloc[FIRST_ELEMENT]
             else:
-                subtree = DecisionTree(attribute_data)
-                node.add_child(attr_value, subtree.train(attributes))
+                subtree = DecisionTree(attribute_data, self.all_attr_values)
+                node.add_child(attr_value, subtree.train(attributes.copy()))
         return node
 
     """
@@ -115,4 +128,28 @@ class DecisionTree():
     @output: all rows of the DF with the given attribute value
     """
     def get_all_samples_with_given_attribute_value(self, attribute, value):
-        return self.data[self.data[attribute] == value]   
+        return self.data[self.data[attribute] == value] 
+
+    """
+    Classifies a sample based on the trained tree
+    @input sample - the sample being classified
+    @input node - the next node for the recursion, or None if it's the first call
+    @output the sample target class
+    """
+    def classify_sample(self, sample, node = None):
+        if node is None and self.tree is None:
+            print("The tree hasn't been trained yet, can't classify new instance")
+            return
+        elif node is not None and node.category is not None:
+            return node.category
+        else:
+            if node is None:
+                node = self.tree
+            return self.classify_sample(sample, node.children[sample[node.attribute]])
+    
+    """
+    Save all possible values for each attribute.
+    """
+    def save_all_attr_values(self):
+        for attr in self.data.columns[:-1]:
+            self.all_attr_values[attr] = self.data[attr].unique()

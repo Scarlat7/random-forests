@@ -1,10 +1,10 @@
 """
 Node for a N-tree implementation
 """
-class Node():
+class Node:
 
-    def __init__(self, category = None, gain = None, attribute = None, children = {}):
-        self.children = children
+    def __init__(self, category = None, gain = None, attribute = None):
+        self.children = {}
         self.attribute = attribute
         self.gain = gain
         self.category = category
