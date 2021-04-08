@@ -3,7 +3,7 @@ Random forests algorithm implementation for UFRGS' class INF1017 - Machine Learn
 
 # Tasks
 - [ ] Decision Tree Algorithm - with Information Gain (Natália)
-  - [ ] Category attributes (Natália)
+  - [X] Category attributes (Natália)
   - [ ] Numerical attributes (Natália)
 - [ ] Function to classify new instance with decision tree (Natália)
 - [ ] Bootstrap for data sampling
