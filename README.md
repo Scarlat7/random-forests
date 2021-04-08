@@ -46,6 +46,15 @@ To install all required dependencies from the `requirements.txt` file, run the f
 python3 -m pip install -r requirements.txt
 ```
 
+# Running unit tests
+
+All unit tests follow a similar approach to how to be run. For example, to run the unit test for the TestTree file:
+
+````shell
+cd src
+python3 -m decision_tree.test.TestTree
+````
+
 # Running the Random Forests algorithm
 
 TBD
