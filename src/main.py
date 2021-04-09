@@ -18,7 +18,9 @@ if __name__ == "__main__":
         df = pd.read_csv(data_file, sep = delimiter)
         decision_tree = DecisionTree(df,target_attr)
         attributes_without_target = df.columns.drop(labels = target_attr)
-        df = data_binning(df, attributes_without_target, nb_bins)
+        # TODO: [WIP] Gonna actually make this dynamic later, don't worry
+        if (data_file == 'wine-recognition.tsv'):
+            df = data_binning(df, attributes_without_target, nb_bins)
         decision_tree.train_tree(attributes_without_target.to_series())
         print("Predicted class: " + str(decision_tree.classify_sample(df.iloc[0])))
     else:
