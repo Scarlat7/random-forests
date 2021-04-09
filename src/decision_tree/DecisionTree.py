@@ -12,15 +12,17 @@ class DecisionTree:
 
     """
     @input: data - data frame containing data
+    @input: nb_attr_node_split - number of attributes to randomly pick on each node split
     @input: all_attr_values - all possible values for all attributes
     @input: target - target attribute name
     """
-    def __init__(self, data, target, all_attr_values = None):
+    def __init__(self, data, target, nb_attr_node_split, all_attr_values = None):
         self.data = data
         self.target = target
         if all_attr_values is None:
             all_attr_values = {}
         self.all_attr_values = all_attr_values
+        self.nb_attr_node_split = nb_attr_node_split
         self.tree = None
     
     """
@@ -67,7 +69,7 @@ class DecisionTree:
             if  attribute_data.empty:
                 node.category = outcomes.mode().iloc[FIRST_ELEMENT]
             else:
-                subtree = DecisionTree(attribute_data, self.target, self.all_attr_values)
+                subtree = DecisionTree(attribute_data, self.target, self.nb_attr_node_split, self.all_attr_values)
                 node.add_child(attr_value, subtree.train(attributes.copy()))
         return node
 
@@ -156,3 +158,24 @@ class DecisionTree:
     def save_all_attr_values(self):
         for attr in self.data.columns.drop(self.target):
             self.all_attr_values[attr] = self.data[attr].unique()
+    
+    """
+    Print the decistion tree trained
+    """
+    def print(self):
+        DEPTH_ZERO = 0
+        self.print_recursive(self.tree, DEPTH_ZERO)
+
+    def print_level(self, level):
+        print("|" + level * '\t', end = "")
+
+    def print_recursive(self, node, level):
+        if node is not None:
+            self.print_level(level)
+            print('[NODE] Gain: ((' + "{:.3f}".format(node.gain) + ')) Attribute ((' + str(node.attribute) + '))')
+            for _,child in node.children.items():
+                if child.is_leaf():
+                    self.print_level(level+1)
+                    print('[LEAF] Class: ((' + str(child.category) + '))')
+                else:
+                    self.print_recursive(child, level+1)
