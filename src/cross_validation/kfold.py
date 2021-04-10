@@ -2,6 +2,10 @@ import pandas as pd
 import random
 from statistics import median, stdev
 
+from decision_tree.DecisionTree import *
+from utils.boostrap import *
+from decision_tree.forest import Forest
+
 SEED = 42
 
 
@@ -61,20 +65,17 @@ def split_data(df, k: int, target_name: str, target_values: list):
 
     return folds
 
-# This will be changed for the function of testing the score of the forest
 
-
-def mock_get_forest_score(train_folds, test_fold):
-    return random.random()
-
-
-def kfold(df, k: int, target_name: str, target_values: list):
-    folds = split_data(df, k, target_name, target_values)
+def kfold(df, k: int, n_trees: int, target_attr: str, target_values: list, nb_attributes_node_split):
+    folds = split_data(df, k, target_attr, target_values)
     scores = []
     for i in range(len(folds)):
-        test_fold = folds[i]
+        test_data = folds[i]
         train_folds = [x for j, x in enumerate(folds) if j != i]
-        s = mock_get_forest_score(train_folds, test_fold)
+        train_data = pd.concat(train_folds)
+        forest = Forest(n_trees, train_data, target_attr,
+                        nb_attributes_node_split)
+        s = forest.forest_score(test_data)
         scores.append(s)
 
     return median(scores), stdev(scores)
@@ -107,24 +108,3 @@ def validate_stratify_folds(df, k: int, target_name: str, target_values: list):
 
     print('Original size: ' + str(df[target_name].size) +
           ' Sum of folds size: ' + str(total_folds_size))
-
-
-if __name__ == "__main__":
-    random.seed(a=SEED)
-    # df = pd.read_csv("./data/dadosBenchmark_validacaoAlgoritmoAD.csv", sep=';')
-    # target_name = 'Joga'
-    # target_values = ['Sim', 'Nao']
-
-    # df = pd.read_csv("./data/house_votes_84.tsv", sep='\t')
-    # target_name = 'target'
-    # target_values = [0,1]
-
-    df = pd.read_csv("./data/wine_recognition.tsv", sep='\t')
-    target_name = 'target'
-    target_values = [1, 2, 3]
-
-    m, d = kfold(df, 10, target_name, target_values)
-    print('Median: ' + str(m))
-    print('Stddev: ' + str(d))
-
-    # validate_stratify_folds(df, 10, target_name, target_values)
