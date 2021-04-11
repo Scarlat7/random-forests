@@ -6,10 +6,9 @@ from utils.boostrap import Bootstrap
 
 
 class Forest:
-    def __init__(self, n_trees, train_data, target, nb_attr_node_split):
+    def __init__(self, n_trees, train_data, target):
         self.train_data = train_data
         self.target = target
-        self.nb_attr_node_split = nb_attr_node_split
         self.n_trees = n_trees
         self.build_forest()
 
@@ -22,10 +21,8 @@ class Forest:
         forest = []
         for train_data in bs_list:
             decision_tree = DecisionTree(
-                train_data, self.target, self.nb_attr_node_split)
-            attributes_without_target = train_data.columns.drop(
-                labels=self.target)
-            decision_tree.train_tree(attributes_without_target.to_series())
+                train_data, self.target)
+            decision_tree.train_tree()
             forest.append(decision_tree)
 
         self.forest = forest
@@ -45,6 +42,7 @@ class Forest:
             # if it is a draw, we flip a coin
             if votes[key] > max_votes or (votes[key] == max_votes and random.randint(0, 1)):
                 winner = key
+                max_votes = votes[key]
 
         return winner
 

@@ -18,6 +18,11 @@ NB_BINS = 5
 TARGET_ATTR = 'target'
 TARGET_ATTR_TEST = 'Joga'
 
+# Target types
+TARGET_TYPES_TEST = 'c'
+TARGET_TYPES_HOUSE = 'c'
+TARGET_TYPES_WINE = 'n'
+
 .DEFAULT_GOAL = help
 
 help:
@@ -28,10 +33,10 @@ help:
 	@echo "------------------------------------"
 
 test:
-	cd src; ${PYTHON}  ${MAIN} ${TEST_DATASET} ${SEMI_COLON_DELIMITER} ${NB_BINS} ${TARGET_ATTR_TEST}
+	cd src; ${PYTHON}  ${MAIN} ${TEST_DATASET} ${SEMI_COLON_DELIMITER} ${NB_BINS} ${TARGET_ATTR_TEST} ${TARGET_TYPES_TEST}
 
 categorical:
-	cd src; ${PYTHON}  ${MAIN} ${HOUSE_DATASET} ${TAB_DELIMITER} ${NB_BINS} ${TARGET_ATTR}
+	cd src; ${PYTHON}  ${MAIN} ${HOUSE_DATASET} ${TAB_DELIMITER} ${NB_BINS} ${TARGET_ATTR} ${TARGET_TYPES_HOUSE}
 
 numerical:
-	cd src; ${PYTHON}  ${MAIN} ${WINE_DATASET} ${TAB_DELIMITER} ${NB_BINS} ${TARGET_ATTR}
+	cd src; ${PYTHON}  ${MAIN} ${WINE_DATASET} ${TAB_DELIMITER} ${NB_BINS} ${TARGET_ATTR} ${TARGET_TYPES_WINE}

@@ -33,7 +33,7 @@ def split_data(df, k: int, target_name: str, target_values: list):
         n_target_per_fold.append(n)
 
     if any(x < 1 for x in n_target_per_fold):
-        raise "Number of folds to high, will not be able to stratify"
+        raise "Number of folds too high, will not be able to stratify"
 
     # since we divide into the folds getting from the start of the table, it is good to shuffle the rows first
     df = df.sample(frac=1, random_state=SEED).reset_index(drop=True)
@@ -66,15 +66,14 @@ def split_data(df, k: int, target_name: str, target_values: list):
     return folds
 
 
-def kfold(df, k: int, n_trees: int, target_attr: str, target_values: list, nb_attributes_node_split):
+def kfold(df, k: int, n_trees: int, target_attr: str, target_values: list):
     folds = split_data(df, k, target_attr, target_values)
     scores = []
     for i in range(len(folds)):
         test_data = folds[i]
         train_folds = [x for j, x in enumerate(folds) if j != i]
         train_data = pd.concat(train_folds)
-        forest = Forest(n_trees, train_data, target_attr,
-                        nb_attributes_node_split)
+        forest = Forest(n_trees, train_data, target_attr)
         s = forest.forest_score(test_data)
         scores.append(s)
 
