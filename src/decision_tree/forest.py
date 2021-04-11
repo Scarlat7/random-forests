@@ -7,13 +7,24 @@ from utils.boostrap import Bootstrap
 
 class Forest:
     def __init__(self, n_trees, train_data, target, nb_attr_node_split):
+        """
+        Initialize and build a forest of DecisionTrees.
+        @input: n_trees - number of trees in the forest
+        @input: train_data - data used to bootstrap and train the trees
+        @input: target - target attribute name
+        @input: nb_attr_node_split - number of attributes to randomly pick on each node split
+        """
         self.train_data = train_data
         self.target = target
         self.nb_attr_node_split = nb_attr_node_split
         self.n_trees = n_trees
         self.build_forest()
 
+
     def build_forest(self):
+        """
+        Bootstrap the train data and use to create and train n_trees.
+        """
         bs = Bootstrap(self.train_data)
         # the size of the bootstrap is the size of the train data
         bs_list = bs.get_n_bootstrap_instances(
@@ -21,6 +32,7 @@ class Forest:
 
         forest = []
         for train_data in bs_list:
+            # create and train trees
             decision_tree = DecisionTree(
                 train_data, self.target, self.nb_attr_node_split)
             attributes_without_target = train_data.columns.drop(
@@ -30,7 +42,12 @@ class Forest:
 
         self.forest = forest
 
+
     def forest_election(self, row):
+        """
+        Classify a instace with every tree in the forest and return the result with more votes.
+        @input: row - the instance to be classified.
+        """
         votes = {}
         for tree in self.forest:
             v = tree.classify_sample(row)
@@ -52,6 +69,10 @@ class Forest:
         return winner
 
     def forest_score(self, test_data: pd.DataFrame):
+        """
+        Return de score of a forest for a given test_data.
+        @input: test_data - data that will be used to score the forest.
+        """
         sum = 0
         for _, row in test_data.iterrows():
             result = self.forest_election(row)

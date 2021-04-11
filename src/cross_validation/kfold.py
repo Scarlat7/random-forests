@@ -1,5 +1,4 @@
 import pandas as pd
-import random
 from statistics import median, stdev
 
 from decision_tree.DecisionTree import *
@@ -67,6 +66,12 @@ def split_data(df, k: int, target_name: str, target_values: list):
 
 
 def kfold(df, k: int, n_trees: int, target_attr: str, target_values: list, nb_attributes_node_split):
+    """
+    Main function used to cross-validation. Will split the data into k folds,
+    will k times, use a different fold as test and the rest as train data
+    and build a forest and calculate the score.
+    Return a median and a standard deviation of all the scores.
+    """
     folds = split_data(df, k, target_attr, target_values)
     scores = []
     for i in range(len(folds)):
