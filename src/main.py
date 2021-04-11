@@ -28,7 +28,7 @@ if __name__ == "__main__":
         random.seed(a=SEED)
         m, d = kfold(df, number_of_folds, number_of_tress, target_attr,
                      target_values, nb_attributes_node_split)
-        print("number_of_tress:", str(number_of_tress))
+        print("number_of_trees:", str(number_of_tress))
         print('Median: ' + str(m))
         print('Stddev: ' + str(d))
 

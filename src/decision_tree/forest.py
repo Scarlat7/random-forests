@@ -45,7 +45,10 @@ class Forest:
             # if it is a draw, we flip a coin
             if votes[key] > max_votes or (votes[key] == max_votes and random.randint(0, 1)):
                 winner = key
+                max_votes = votes[key]
 
+        if winner == "":
+            raise "something went wrong on election"
         return winner
 
     def forest_score(self, test_data: pd.DataFrame):
