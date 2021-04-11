@@ -1,20 +1,6 @@
 # random-forests
 Random forests algorithm implementation for UFRGS' class INF1017 - Machine Learning of 2020/2.
 
-# Tasks
-- [ ] Decision Tree Algorithm - with Information Gain (Natália)
-  - [X] Category attributes (Natália)
-  - [ ] Numerical attributes (Natália)
-- [X] Function to classify new instance with decision tree (Natália)
-- [ ] Bootstrap for data sampling
-- [ ] Sampling of m attributes for each node division (Natália)
-- [ ] Training of an ensemble of trees
-- [ ] Majority voting for the ensemble
-- [ ] Stratified cross-validation
-- [ ] Assessment of the performance with different number of trees in the ensemble
-- [ ] README with instructions on how to execute the code
-
-
 # Installation instructions
 
 ## Requirements
@@ -57,4 +43,34 @@ python3 -m decision_tree.test.TestTree
 
 # Running the Random Forests algorithm
 
-TBD
+To run the test benchmark, to validate the basic decision tree implementation, run:
+
+````shell
+make test
+````
+
+To run the test with the categorical data (that is, the house votes dataset):
+````shell
+make categorical
+````
+
+To run the test with the numerical data (that is, the wine recognition dataset):
+````shell
+make numerical
+````
+
+These are make templates using the `Makefile` present in the root directory. To generally run the application, one may use:
+
+````shell
+python3 main.py <data_file_name> '<file_delimiter>' <nb_bins> <target_attribute> <attr_type>
+````
+
+For example:
+
+````shell
+python3 main.py data.csv ',' 5 'target' 'c'
+````
+
+Where 'c' means categorical data and 'n' means numerical data.
+
+To vary the number of tree and folds, one may change the attributes `number_of_tress` and `number_of_folds` on the `main.py` file.

@@ -40,4 +40,4 @@ if __name__ == "__main__":
         print('Stddev: ' + str(d))
 
     else:
-        print("Wrong number of arguments ({}). Please use script as python3 main.py <data_file_name> '<file_delimiter>' <nb_bins> <target_attribute>. E.g.: python3 main.py data.csv ',' 5 'target'\nThe number of bins will be disregarded if the data is composed of entirely categorical attributes.".format(len(sys.argv)))
+        print("Wrong number of arguments ({}). Please use script as python3 main.py <data_file_name> '<file_delimiter>' <nb_bins> <target_attribute> <attr_type>. E.g.: python3 main.py data.csv ',' 5 'target'\nThe number of bins will be disregarded if the data is composed of entirely categorical attributes.".format(len(sys.argv)))
