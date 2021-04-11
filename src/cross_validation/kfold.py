@@ -70,13 +70,14 @@ def kfold(df, k: int, n_trees: int, target_attr: str, target_values: list):
     folds = split_data(df, k, target_attr, target_values)
     scores = []
     for i in range(len(folds)):
+        print(i,end=' ',flush=True)
         test_data = folds[i]
         train_folds = [x for j, x in enumerate(folds) if j != i]
         train_data = pd.concat(train_folds)
         forest = Forest(n_trees, train_data, target_attr)
         s = forest.forest_score(test_data)
         scores.append(s)
-
+    print()
     return median(scores), stdev(scores)
 
 

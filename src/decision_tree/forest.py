@@ -44,6 +44,8 @@ class Forest:
                 winner = key
                 max_votes = votes[key]
 
+        if winner == "":
+            raise "something went wrong on election"
         return winner
 
     def forest_score(self, test_data: pd.DataFrame):
